@@ -1,0 +1,11 @@
+Package: cstringr
+Title: Low Level C String Manipulations
+Version: 0.0.0.9000
+Description: Exports safer versions of `strlen`, `sprintf`, and a couple of
+    additional helper functions.
+Author: Brodie Gaslam
+Maintainer: Brodie Gaslam <brodie.gaslam@yahoo.com>
+Depends:
+    R (>= 3.1.2)
+License: GPL-2
+LazyData: true
