@@ -64,13 +64,13 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #' @return integer(1L) for \code{strmlen}, character(1L) for \code{strmtrunc}
 #'   and \code{smprintf2}
 
-strmlen <- function(str, maxlen) .Call(CSR_strmlen_ext, str, maxlen)
+strmlen <- function(str, maxlen=10000) .Call(CSR_strmlen_ext, str, maxlen)
 
 #' @export
 
-strmtrunc <- function(str, maxlen) .Call(CSR_strmtrunc_ext, str, maxlen)
+strmtrunc <- function(str, maxlen=10000) .Call(CSR_strmtrunc_ext, str, maxlen)
 
 #' @export
 
-smprintf2 <- function(maxlen, format, a, b)
+smprintf2 <- function(format, a, b, maxlen=10000)
   .Call(CSR_smprintf2_ext, maxlen, format, a, b)
