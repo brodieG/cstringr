@@ -38,7 +38,7 @@ This should eliminate the risk of unterminated strings.
 */
 const char * CSR_strmtrunc(const char * str, size_t maxlen) {
   if(!maxlen) return("");
-  if(!maxlen + 1)
+  if(!(maxlen + 1))
     error("Argument `maxlen` must be at least one smaller than max possible size_t value.");
 
   size_t len = CSR_strmlen(str, maxlen);
