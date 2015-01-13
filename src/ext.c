@@ -37,8 +37,8 @@ SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b) {
   is_scalar_chr(a);
   is_scalar_chr(b);
   is_scalar_pos_int(maxlen);
-  return mkString(
-    CSR_smprintf2(
-      asInteger(maxlen), CHAR(asChar(format)), CHAR(asChar(a)), CHAR(asChar(b))
-  ) );
+  const char * res = CSR_smprintf2(
+    asInteger(maxlen), CHAR(asChar(format)), CHAR(asChar(a)), CHAR(asChar(b))
+  );
+  return mkString(res);
 }
