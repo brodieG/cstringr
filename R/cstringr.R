@@ -1,14 +1,3 @@
-#' Set Number of Chars after Which To Assume Termination
-#'
-#' Strings longer than \code{x} will be reported as being \code{x} long.  This
-#' sets a global variable that affects several other functions in the package.
-#'
-#' @seealso \code{\link{strlen}}, \code{\link{strtrunc}}, \code{\link{sprintf2}}
-#' @param integer(1L)
-#' @return \code{x} on success, errors on failure
-#' @export
-
-set_max_strlen <- function(x) .Call(CSR_set_max_strlen_ext, x)
 
 #' Number of Characters Taken By Numeric Representation
 #'
@@ -30,36 +19,58 @@ len_chr_len <- function(x) .Call(CSR_len_chr_len_ext, x)
 
 len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 
-#' Character Length of String
+#' "Safe" String Manipulation Functions
+#'
+#' Implements variants of \code{strlcpy}, \code{strnlen}, etc.
+#'
+#' These functions are intended to be used directly from C but are exposed here
+#' for testing purposes.  They differ from similar existing versions in these
+#' respects:
+#'
+#' \itemize{
+#'   \item Input strings are never modified; if changes are required to comply
+#'     with length limits a copy that is \code{R_alloc}ed is returned
+#'   \item Only C99 code is used
+#' }
+#' Function specific details follow.  Pay attention, the interfaces are not
+#' exactly the same as the \code{C} functions they intend to replace (e.g.
+#' \code{smprintf} does not have a \code{str} parameter like \code{snprintf}).
+#'
+#' \itemize{
+#'   \item \code{strmlen}: roughly equivalent to POSIX \code{strnlen}, but
+#'     should be fully portable
+#'   \item \code{strmtrunc}: if \code{strmlen(str)} is greater than \code{maxlen},
+#'     returns a copy of \code{str} with \code{'\0'} as the \code{maxlen}th
+#'     character, otherwise returns \code{str}
+#'   \item \code{smprintf2}: returns a newly \code{R_alloc}ed string that is just
+#'     large enough to fit the combination of the format string and the tokens
+#'     to sub in (note that tokens must be character so only "%s" is meaningful
+#'     as a formatting element).  To achieve this without overflow, ensures that
+#'     \code{format} and each token is limited to \code{maxlen - 1} characters.
+#'     Fails if result string is longer than a \code{size_t} could index.  Note
+#'     that internally we define \code{smprintf1} - \code{smprintf6}, but we are
+#'     only exporting the one function directly to R for testing.
+#' }
 #'
 #' e.g., \code{"abc"} returns 3
 #'
-#' @seealso \code{\link{set_max_strlen}}
-#' @param x charater(1L)
-#' @return integer(1L)
 #' @export
-
-strlen <- function(x) .Call(CSR_strlen_ext, x)
-
-#' Truncate String Down to max_strlen If Necessary
-#'
-#' @seealso \code{\link{set_max_strlen}}
-#' @param x character(1L)
-#' @return character(1L)
-#' @export
-
-strtrunc <- function(x) .Call(CSR_strtrunc_ext, x)
-
-#' Combines Multiple Character Strings Into One
-#'
-#' Much like \code{\link{sprintf}}, but ensures all arguments are NULL terminated
-#' or truncates them if they exceed max_strlen, also only allows two tokens.
-#'
-#' @seealso \code{\link{set_max_strlen}}, \code{\link{sprintf}}
-#' @param x character(1L) the base string to sub the others into
+#' @aliases strmtrunc smprintf2
+#' @param str charater(1L) string to measure or truncate
+#' @param format character(1L) string to use as format template
+#' @param maxlen integer(1L) size limit to truncate to, or to limit tokens to
 #' @param a character(1L) another string
 #' @param b character(1L) another string
-#' @return character(1L)
+#' @return integer(1L) for \code{strmlen}, character(1L) for \code{strmtrunc}
+#'   and \code{smprintf2}
+
+strmlen <- function(str, maxlen) .Call(CSR_strmlen_ext, str, maxlen)
+
 #' @export
 
-sprintf2 <- function(x, a, b) .Call(CSR_rsprintf2_ext, x, a, b)
+strmtrunc <- function(str, maxlen) .Call(CSR_strmtrunc_ext, str, maxlen)
+
+#' @export
+
+smprintf2 <- function(maxlen, format, a, b)
+  .Call(CSR_smprintf2_ext, maxlen, format, a, b)

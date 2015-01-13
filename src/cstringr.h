@@ -3,18 +3,35 @@
 
 // Testing Functions
 
-SEXP CSR_set_max_strlen_ext(SEXP size);
 SEXP CSR_len_chr_len_ext(SEXP a);
 SEXP CSR_len_as_chr_ext(SEXP a);
-SEXP CSR_strlen_ext(SEXP str);
-SEXP CSR_strtrunc_ext(SEXP str);
-SEXP CSR_sprintf2_ext(SEXP base, SEXP a, SEXP b);
+SEXP CSR_strmlen_ext(SEXP str, SEXP maxlen);
+SEXP CSR_strmtrunc_ext(SEXP str, SEXP maxlen);
+SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b);
 
 // Internal Functions
 
-void CSR_set_max_strlen(size_t size);
 size_t CSR_len_chr_len(R_xlen_t a);
 const char * CSR_len_as_chr(R_xlen_t a);
-size_t CSR_strlen(const char * str);
-const char * CSR_strtrunc(const char * str);
-const char * CSR_sprintf2(const char * base, const char * a, const char * b);
+size_t CSR_strmlen(const char * str, size_t maxlen);
+const char * CSR_strmtrunc(const char * str, size_t maxlen);
+const char * CSR_smprintf6(
+  size_t maxlen, const char * format, const char * a, const char * b,
+  const char * c, const char * d, const char * e, const char * f
+);
+const char * CSR_smprintf5(
+  size_t maxlen, const char * format, const char * a, const char * b,
+  const char * c, const char * d, const char * e
+);
+const char * CSR_smprintf4(
+  size_t maxlen, const char * format, const char * a, const char * b,
+  const char * c, const char * d
+);
+const char * CSR_smprintf3(
+  size_t maxlen, const char * format, const char * a, const char * b,
+  const char * c
+);
+const char * CSR_smprintf2(
+  size_t maxlen, const char * format, const char * a, const char * b
+);
+const char * CSR_smprintf1(size_t maxlen, const char * format, const char * a);

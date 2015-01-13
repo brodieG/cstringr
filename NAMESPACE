@@ -2,8 +2,7 @@
 
 export(len_as_chr)
 export(len_chr_len)
-export(set_max_strlen)
-export(sprintf2)
-export(strlen)
-export(strtrunc)
+export(smprintf2)
+export(strmlen)
+export(strmtrunc)
 useDynLib(cstringr, .registration=TRUE, .fixes="CSR_")

@@ -14,11 +14,6 @@ void is_scalar_chr(SEXP obj) {
   if(TYPEOF(obj) != STRSXP || XLENGTH(obj) != 1L)
     error("Argument `size` must be a positive scalar integer");
 }
-SEXP CSR_set_max_strlen_ext(SEXP size) {
-  is_scalar_pos_int(size);
-  CSR_set_max_strlen((R_xlen_t) asInteger(size));
-  return size;
-}
 SEXP CSR_len_chr_len_ext(SEXP a) {
   is_scalar_pos_int(a);
   return ScalarInteger(CSR_len_chr_len((R_xlen_t) asInteger(a)));
@@ -27,17 +22,23 @@ SEXP CSR_len_as_chr_ext(SEXP a) {
   is_scalar_pos_int(a);
   return mkString(CSR_len_as_chr((R_xlen_t) asInteger(a)));
 }
-SEXP CSR_strlen_ext(SEXP str) {
+SEXP CSR_strmlen_ext(SEXP str, SEXP maxlen) {
   is_scalar_chr(str);
-  return(ScalarInteger(CSR_strlen(CHAR(asChar(str)))));
+  is_scalar_pos_int(maxlen);
+  return(ScalarInteger(CSR_strmlen(CHAR(asChar(str)), asInteger(maxlen))));
 }
-SEXP CSR_strtrunc_ext(SEXP str) {
+SEXP CSR_strmtrunc_ext(SEXP str, SEXP maxlen) {
   is_scalar_chr(str);
-  return(mkString(CSR_strtrunc(CHAR(asChar(str)))));
+  is_scalar_pos_int(maxlen);
+  return(mkString(CSR_strmtrunc(CHAR(asChar(str)), asInteger(maxlen))));
 }
-SEXP CSR_sprintf2_ext(SEXP base, SEXP a, SEXP b) {
-  is_scalar_chr(base);
+SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b) {
+  is_scalar_chr(format);
   is_scalar_chr(a);
   is_scalar_chr(b);
-  return(mkString(CSR_sprintf2(CHAR(asChar(base)), CHAR(asChar(a)), CHAR(asChar(b)))));
+  is_scalar_pos_int(maxlen);
+  return mkString(
+    CSR_smprintf2(
+      asInteger(maxlen), CHAR(asChar(format)), CHAR(asChar(a)), CHAR(asChar(b))
+  ) );
 }
