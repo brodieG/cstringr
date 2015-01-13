@@ -83,7 +83,11 @@ const char * CSR_smprintf6(
 
   char * res;
   res = R_alloc(full_len, sizeof(char));
-  sprintf(res, format, a, b, c, d, e, f);
+  sprintf(
+    res, CSR_strmtrunc(format, maxlen), CSR_strmtrunc(a, maxlen),
+    CSR_strmtrunc(b, maxlen), CSR_strmtrunc(c, maxlen),
+    CSR_strmtrunc(d, maxlen), CSR_strmtrunc(e, maxlen), CSR_strmtrunc(f, maxlen)
+  );
   return (const char *) res;
 }
 const char * CSR_smprintf5(
