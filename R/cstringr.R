@@ -41,7 +41,8 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #'     should be fully portable
 #'   \item \code{strmtrunc}: if \code{strmlen(str)} is greater than \code{maxlen},
 #'     returns a copy of \code{str} with \code{'\0'} as the \code{maxlen}th
-#'     character, otherwise returns \code{str}
+#'     character (note return character array is not allocated beyond this NULL),
+#'     otherwise returns \code{str}
 #'   \item \code{smprintf2}: returns a newly \code{R_alloc}ed string that is just
 #'     large enough to fit the combination of the format string and the tokens
 #'     to sub in (note that tokens must be character so only "%s" is meaningful
@@ -51,9 +52,6 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #'     that internally we define \code{smprintf1} - \code{smprintf6}, but we are
 #'     only exporting the one function directly to R for testing.
 #' }
-#'
-#' e.g., \code{"abc"} returns 3
-#'
 #' @export
 #' @aliases strmtrunc smprintf2
 #' @param str charater(1L) string to measure or truncate
@@ -64,13 +62,13 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #' @return integer(1L) for \code{strmlen}, character(1L) for \code{strmtrunc}
 #'   and \code{smprintf2}
 
-strmlen <- function(str, maxlen=10000) .Call(CSR_strmlen_ext, str, maxlen)
+strmlen <- function(str, maxlen=10000L) .Call(CSR_strmlen_ext, str, maxlen)
 
 #' @export
 
-strmtrunc <- function(str, maxlen=10000) .Call(CSR_strmtrunc_ext, str, maxlen)
+strmtrunc <- function(str, maxlen=10000L) .Call(CSR_strmtrunc_ext, str, maxlen)
 
 #' @export
 
-smprintf2 <- function(format, a, b, maxlen=10000)
+smprintf2 <- function(format, a, b, maxlen=10000L)
   .Call(CSR_smprintf2_ext, maxlen, format, a, b)
