@@ -120,3 +120,21 @@ const char * CSR_smprintf2(
 const char * CSR_smprintf1(size_t maxlen, const char * format, const char * a) {
   return(CSR_smprintf6(maxlen, format, a, "", "", "", "", ""));
 }
+
+// - Capitalization functions --------------------------------------------------
+
+/* Make copy and capitalize first letter */
+
+const char * CSR_ucfirst(const char * str, size_t maxlen) {
+  char * str_new = (char *) CSR_strmtrunc(str, maxlen);
+  str_new[0] = toupper(str_new[0]);
+  return str_new;
+}
+const char * CSR_lcfirst(const char * str, size_t maxlen) {
+  char * str_new = (char *) CSR_strmtrunc(str, maxlen);
+  str_new[0] = tolower(str_new[0]);
+  return str_new;
+}
+
+
+

@@ -1,5 +1,6 @@
 #include <R.h>
 #include <Rinternals.h>
+#include <ctype.h>
 
 // Testing Functions
 
@@ -8,6 +9,8 @@ SEXP CSR_len_as_chr_ext(SEXP a);
 SEXP CSR_strmlen_ext(SEXP str, SEXP maxlen);
 SEXP CSR_strmtrunc_ext(SEXP str, SEXP maxlen);
 SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b);
+SEXP CSR_ucfirst_ext(SEXP str, SEXP maxlen);
+SEXP CSR_lcfirst_ext(SEXP str, SEXP maxlen);
 
 // Internal Functions
 
@@ -35,3 +38,6 @@ const char * CSR_smprintf2(
   size_t maxlen, const char * format, const char * a, const char * b
 );
 const char * CSR_smprintf1(size_t maxlen, const char * format, const char * a);
+
+const char * CSR_ucfirst(const char * str, size_t maxlen);
+const char * CSR_lcfirst(const char * str, size_t maxlen);

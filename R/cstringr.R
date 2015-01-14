@@ -72,3 +72,11 @@ strmtrunc <- function(str, maxlen=10000L) .Call(CSR_strmtrunc_ext, str, maxlen)
 
 smprintf2 <- function(format, a, b, maxlen=10000L)
   .Call(CSR_smprintf2_ext, maxlen, format, a, b)
+
+#' @export
+
+ucfirst <- function(str, maxlen=10000L) .Call(CSR_ucfirst_ext, str, maxlen)
+
+#' @export
+
+lcfirst <- function(str, maxlen=10000L) .Call(CSR_lcfirst_ext, str, maxlen)

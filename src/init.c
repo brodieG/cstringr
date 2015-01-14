@@ -8,6 +8,8 @@ R_CallMethodDef callMethods[] = {
   {"strmlen_ext", (DL_FUNC) &CSR_strmlen_ext, 2},
   {"strmtrunc_ext", (DL_FUNC) &CSR_strmtrunc_ext, 2},
   {"smprintf2_ext", (DL_FUNC) &CSR_smprintf2_ext, 4},
+  {"ucfirst_ext", (DL_FUNC) &CSR_ucfirst_ext, 2},
+  {"lcfirst_ext", (DL_FUNC) &CSR_lcfirst_ext, 2},
   {NULL, NULL, 0}
 };
 
