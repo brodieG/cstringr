@@ -32,9 +32,9 @@ size_t CSR_strmlen(const char * str, size_t maxlen) {
 /*
 If str has more than size characters, returns a copy of str truncated to size
 characters with a null character appended such that strmlen() str == size,
-otherwise returns str.
+otherwise returns a copy of str.
 
-This should eliminate the risk of unterminated strings.
+Note, final string size could be up to maxlen + 1 including the NULL terminator.
 */
 const char * CSR_strmtrunc(const char * str, size_t maxlen) {
   if(!maxlen) return("");
@@ -42,13 +42,17 @@ const char * CSR_strmtrunc(const char * str, size_t maxlen) {
     error("Argument `maxlen` must be at least one smaller than max possible size_t value.");
 
   size_t len = CSR_strmlen(str, maxlen);
+  char * str_new = R_alloc(len + 1, sizeof(char));
+
   if(len == maxlen) {  // Need to truncate
-    char * str_new = R_alloc(maxlen + 1, sizeof(char));
     if(!strncpy(str_new, str, maxlen))
       error("Logic Error: failed making copy of string for truncation; contact maintainer.");
     str_new[maxlen] = '\0';
     return (const char *) str_new;
-  } else if (len < maxlen) return(str);
+  } else if (len < maxlen) {
+    strcpy(str_new, str);
+    return (const char *) str_new;
+  }
   error("Logic Error: should never get here 46; contact maintainer.");
 }
 
