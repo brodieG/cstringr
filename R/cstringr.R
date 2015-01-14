@@ -33,16 +33,18 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #'   \item Only C99 code is used
 #' }
 #' Function specific details follow.  Pay attention, the interfaces are not
-#' exactly the same as the \code{C} functions they intend to replace (e.g.
-#' \code{smprintf} does not have a \code{str} parameter like \code{snprintf}).
+#' exactly the same as the \code{C} functions they intend to replace.  For
+#' example \code{smprintf} does not have a \code{str} parameter like
+#' \code{snprintf}, and \code{strmcpy} returns a new character string instead of
+#' modifying one passed as an argument.).
 #'
 #' \itemize{
 #'   \item \code{strmlen}: roughly equivalent to POSIX \code{strnlen}, but
 #'     should be fully portable
 #'   \item \code{strmcpy}: if \code{strmlen(str)} is greater than \code{maxlen},
-#'     returns a copy of \code{str} with \code{'\0'} as the \code{maxlen}th
+#'     returns a copy of \code{str} with \code{'\0'} as the \code{maxlen + 1}th
 #'     character (note return character array is not allocated beyond this NULL),
-#'     otherwise returns \code{str}
+#'     otherwise returns a copy of \code{str}.
 #'   \item \code{smprintf2}: returns a newly \code{R_alloc}ed string that is just
 #'     large enough to fit the combination of the format string and the tokens
 #'     to sub in (note that tokens must be character so only "%s" is meaningful
