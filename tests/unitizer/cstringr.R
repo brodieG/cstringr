@@ -15,9 +15,9 @@ len_as_chr(1234567890000000000000000)
 identical(strmlen(lorem), nchar(lorem))
 strmlen(lorem, 100L)
 
-identical(strmtrunc(lorem), lorem)
-strmtrunc(lorem, 20L)
-identical(nchar(strmtrunc(lorem, 20L)), 20L)
+identical(strmcpy(lorem), lorem)
+strmcpy(lorem, 20L)
+identical(nchar(strmcpy(lorem, 20L)), 20L)
 
 smprintf2("%s %s", lorem, lorem, 10L)
 smprintf2("%s %s hello world there", lorem, lorem, 10L)

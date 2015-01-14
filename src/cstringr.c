@@ -36,7 +36,7 @@ otherwise returns a copy of str.
 
 Note, final string size could be up to maxlen + 1 including the NULL terminator.
 */
-char * CSR_strmtrunc(const char * str, size_t maxlen) {
+char * CSR_strmcpy(const char * str, size_t maxlen) {
   if(!maxlen) return("");
   if(!(maxlen + 1))
     error("Argument `maxlen` must be at least one smaller than max possible size_t value.");
@@ -88,9 +88,9 @@ char * CSR_smprintf6(
   char * res;
   res = R_alloc(full_len, sizeof(char));
   sprintf(
-    res, CSR_strmtrunc(format, maxlen), CSR_strmtrunc(a, maxlen),
-    CSR_strmtrunc(b, maxlen), CSR_strmtrunc(c, maxlen),
-    CSR_strmtrunc(d, maxlen), CSR_strmtrunc(e, maxlen), CSR_strmtrunc(f, maxlen)
+    res, CSR_strmcpy(format, maxlen), CSR_strmcpy(a, maxlen),
+    CSR_strmcpy(b, maxlen), CSR_strmcpy(c, maxlen),
+    CSR_strmcpy(d, maxlen), CSR_strmcpy(e, maxlen), CSR_strmcpy(f, maxlen)
   );
   return res;
 }
@@ -126,12 +126,12 @@ char * CSR_smprintf1(size_t maxlen, const char * format, const char * a) {
 /* Make copy and capitalize first letter */
 
 char * CSR_ucfirst(const char * str, size_t maxlen) {
-  char * str_new = (char *) CSR_strmtrunc(str, maxlen);
+  char * str_new = (char *) CSR_strmcpy(str, maxlen);
   str_new[0] = toupper(str_new[0]);
   return str_new;
 }
 char * CSR_lcfirst(const char * str, size_t maxlen) {
-  char * str_new = (char *) CSR_strmtrunc(str, maxlen);
+  char * str_new = (char *) CSR_strmcpy(str, maxlen);
   str_new[0] = tolower(str_new[0]);
   return str_new;
 }

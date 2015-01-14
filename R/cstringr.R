@@ -39,7 +39,7 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #' \itemize{
 #'   \item \code{strmlen}: roughly equivalent to POSIX \code{strnlen}, but
 #'     should be fully portable
-#'   \item \code{strmtrunc}: if \code{strmlen(str)} is greater than \code{maxlen},
+#'   \item \code{strmcpy}: if \code{strmlen(str)} is greater than \code{maxlen},
 #'     returns a copy of \code{str} with \code{'\0'} as the \code{maxlen}th
 #'     character (note return character array is not allocated beyond this NULL),
 #'     otherwise returns \code{str}
@@ -53,20 +53,20 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #'     only exporting the one function directly to R for testing.
 #' }
 #' @export
-#' @aliases strmtrunc smprintf2
+#' @aliases strmcpy smprintf2
 #' @param str charater(1L) string to measure or truncate
 #' @param format character(1L) string to use as format template
 #' @param maxlen integer(1L) size limit to truncate to, or to limit tokens to
 #' @param a character(1L) another string
 #' @param b character(1L) another string
-#' @return integer(1L) for \code{strmlen}, character(1L) for \code{strmtrunc}
+#' @return integer(1L) for \code{strmlen}, character(1L) for \code{strmcpy}
 #'   and \code{smprintf2}
 
 strmlen <- function(str, maxlen=10000L) .Call(CSR_strmlen_ext, str, maxlen)
 
 #' @export
 
-strmtrunc <- function(str, maxlen=10000L) .Call(CSR_strmtrunc_ext, str, maxlen)
+strmcpy <- function(str, maxlen=10000L) .Call(CSR_strmcpy_ext, str, maxlen)
 
 #' @export
 

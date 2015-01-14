@@ -27,10 +27,10 @@ SEXP CSR_strmlen_ext(SEXP str, SEXP maxlen) {
   is_scalar_pos_int(maxlen);
   return(ScalarInteger(CSR_strmlen(CHAR(asChar(str)), asInteger(maxlen))));
 }
-SEXP CSR_strmtrunc_ext(SEXP str, SEXP maxlen) {
+SEXP CSR_strmcpy_ext(SEXP str, SEXP maxlen) {
   is_scalar_chr(str);
   is_scalar_pos_int(maxlen);
-  return(mkString(CSR_strmtrunc(CHAR(asChar(str)), asInteger(maxlen))));
+  return(mkString(CSR_strmcpy(CHAR(asChar(str)), asInteger(maxlen))));
 }
 SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b) {
   is_scalar_chr(format);
