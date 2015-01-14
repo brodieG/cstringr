@@ -8,11 +8,11 @@ inputs don't overflow int
 
 void is_scalar_pos_int(SEXP obj) {
   if(TYPEOF(obj) != INTSXP || XLENGTH(obj) != 1L || asInteger(obj) < 0)
-    error("Argument `size` must be a positive scalar integer");
+    error("Argument `maxlen` must be a positive scalar integer");
 }
 void is_scalar_chr(SEXP obj) {
   if(TYPEOF(obj) != STRSXP || XLENGTH(obj) != 1L)
-    error("Argument `size` must be a positive scalar integer");
+    error("Argument `str` must be a scalar character");
 }
 SEXP CSR_len_chr_len_ext(SEXP a) {
   is_scalar_pos_int(a);
