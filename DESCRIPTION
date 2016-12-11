@@ -1,6 +1,6 @@
 Package: cstringr
 Title: Low Level C String Manipulations
-Version: 0.0.1
+Version: 0.0.2
 Description: Exports safer versions of `strlen`, `sprintf`, and a couple of
     additional helper functions.
 Author: Brodie Gaslam
@@ -11,3 +11,4 @@ License: GPL-2
 LazyData: true
 Suggests:
     unitizer
+RoxygenNote: 5.0.1
