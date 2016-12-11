@@ -11,6 +11,7 @@ SEXP CSR_strmcpy_ext(SEXP str, SEXP maxlen);
 SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b);
 SEXP CSR_ucfirst_ext(SEXP str, SEXP maxlen);
 SEXP CSR_lcfirst_ext(SEXP str, SEXP maxlen);
+SEXP CSR_bullet_ext(SEXP str, SEXP bullet, SEXP ctd, SEXP maxlen);
 
 // Internal Functions
 
@@ -38,6 +39,8 @@ char * CSR_smprintf2(
   size_t maxlen, const char * format, const char * a, const char * b
 );
 char * CSR_smprintf1(size_t maxlen, const char * format, const char * a);
-
+const char * CSR_bullet(
+  const char * string, const char * bullet, const char * ctd, size_t max_len
+);
 char * CSR_ucfirst(const char * str, size_t maxlen);
 char * CSR_lcfirst(const char * str, size_t maxlen);

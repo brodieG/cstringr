@@ -3,7 +3,7 @@
 #'
 #' e.g., for 100, would be 3, for 1324, would be 4.
 #'
-#' @param integer(1L)
+#' @param x integer(1L)
 #' @return integer(1L)
 #' @export
 
@@ -13,7 +13,7 @@ len_chr_len <- function(x) .Call(CSR_len_chr_len_ext, x)
 #'
 #' e.g., \code{100} becomes \code{"100"}
 #'
-#' @param integer(1L)
+#' @param x integer(1L)
 #' @return character(1L)
 #' @export
 
@@ -53,10 +53,12 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #'     Fails if result string is longer than a \code{size_t} could index.  Note
 #'     that internally we define \code{smprintf1} - \code{smprintf6}, but we are
 #'     only exporting the one function directly to R for testing.
+#'   \item \code{strbullet} ads a bullet at front of string and padding after
+#'     each new line
 #' }
 #' @export
 #' @aliases strmcpy smprintf2
-#' @param str charater(1L) string to measure or truncate
+#' @param str character(1L) string to measure or truncate
 #' @param format character(1L) string to use as format template
 #' @param maxlen integer(1L) size limit to truncate to, or to limit tokens to
 #' @param a character(1L) another string
@@ -82,3 +84,8 @@ ucfirst <- function(str, maxlen=10000L) .Call(CSR_ucfirst_ext, str, maxlen)
 #' @export
 
 lcfirst <- function(str, maxlen=10000L) .Call(CSR_lcfirst_ext, str, maxlen)
+
+#' @export
+
+strbullet <- function(str, bullet="- ", ctd="  ", maxlen=10000L)
+  .Call(CSR_bullet_ext, str, bullet, ctd, maxlen)

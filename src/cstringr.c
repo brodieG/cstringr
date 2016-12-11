@@ -27,7 +27,12 @@ from insane blogger
 */
 size_t CSR_strmlen(const char * str, size_t maxlen) {
   const char *p = (const char *) memchr(str, 0, maxlen);
-  return (p ? p - str : maxlen);
+  if(!p) error(
+    "%s%s",
+    "CSR_strmlen: String longer than `maxlen`! Cannot measure; ",
+    "contact maintainer."
+  );
+  return p - str;
 }
 /*
 If str has more than size characters, returns a copy of str truncated to size
@@ -135,6 +140,64 @@ char * CSR_lcfirst(const char * str, size_t maxlen) {
   str_new[0] = tolower(str_new[0]);
   return str_new;
 }
+/*
+ * Makes a copy of string, and adds `bullet` at the beginning, and `ctd` after
+ * each newline
+ *
+ * Remember we could end up allocating 1 more than max_len
+ */
 
+const char * CSR_bullet(
+  const char * string, const char * bullet, const char * ctd, size_t max_len
+) {
+  size_t newlines=0;
+  const char * string_copy = string;
 
+  while(*string_copy) {
+    if(*string_copy == '\n' && *(string_copy + 1)) ++newlines;
+    ++string_copy;
+    if(string_copy - string + 1 > max_len)
+      error("Exceeded `max_len` when trying to bullet `string`");
+  }
+  size_t ctd_size = CSR_strmlen(ctd, max_len);
+  size_t bullet_size = CSR_strmlen(bullet, max_len);
+
+  // Try to add all numbers together in a way that checks for overflows
+
+  size_t size_all = add_szt(string_copy - string, 1);
+  size_all = add_szt(size_all, bullet_size);
+  for(size_t i = 0; i < newlines; ++i) size_all = add_szt(size_all, ctd_size);
+
+  if(size_all > max_len)
+    error("Exceeded `max_len` when trying to bullet `string` (2)");
+
+  // Now allocate
+
+  char * res = R_alloc(size_all + 1, sizeof(char));
+  char * res_cpy  = res;
+
+  // Second pass, copy stuff to our result string, start by adding the bullet
+
+  strcpy(res_cpy, bullet);
+  res_cpy += bullet_size;
+
+  string_copy = string;
+  while(*string_copy) {
+    int add_ctd = 0;
+    *res_cpy = *string_copy;
+    if(*res_cpy == '\n') {
+      add_ctd = 1;
+    }
+    ++res_cpy;
+    ++string_copy;
+    if(add_ctd) {
+      strcpy(res_cpy, ctd);
+      res_cpy += ctd_size;
+    }
+    // *(res_cpy + 1) = '\0';  // so we can Rprintf
+  }
+  *(res_cpy + 1) = '\0';
+
+  return res;
+}
 

@@ -52,3 +52,28 @@ SEXP CSR_lcfirst_ext(SEXP str, SEXP maxlen) {
   is_scalar_pos_int(maxlen);
   return(mkString(CSR_lcfirst(CHAR(asChar(str)), asInteger(maxlen))));
 }
+SEXP CSR_bullet_ext(SEXP str, SEXP bullet, SEXP ctd, SEXP maxlen) {
+  R_xlen_t i, str_len = XLENGTH(str);
+  SEXP res = PROTECT(allocVector(STRSXP, str_len));
+  if(TYPEOF(str) != STRSXP || TYPEOF(bullet) != STRSXP || TYPEOF(ctd) != STRSXP)
+    error("First three arguments must be string");
+  if(TYPEOF(maxlen) != INTSXP) error("Argument `maxlen` must be integer");
+  if(XLENGTH(bullet) != 1) error("Argument `bullet` must be length 1");
+  if(XLENGTH(ctd) != 1) error("Argument `ctd` must be length 1");
+
+  const char * chr_bul = CHAR(STRING_ELT(bullet, 0));
+  const char * chr_ctd = CHAR(STRING_ELT(ctd, 0));
+  size_t st_ml = INTEGER(maxlen)[0];
+
+  if(str_len) {
+    for(i = 0; i < str_len; ++i) {
+      SET_STRING_ELT(
+        res, i,
+        mkChar(
+          CSR_bullet(
+            CHAR(STRING_ELT(str, i)), chr_bul, chr_ctd, st_ml)
+      ) );
+  } }
+  UNPROTECT(1);
+  return res;
+}

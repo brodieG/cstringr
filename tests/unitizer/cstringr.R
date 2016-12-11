@@ -26,3 +26,7 @@ lorem # make sure lorem unchanged
 
 ucfirst("hello WORLD")
 lcfirst("HELLO world")
+
+strbullet(
+  c("hello world\nhow are things today", "once upon a time\nlived a funny duck")
+)
