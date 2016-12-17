@@ -21,18 +21,41 @@ char * CSR_len_as_chr(R_xlen_t a) {
   return res;
 }
 /*
-A safe strmlen, stops counting at number of characters specified by maxlen
+A safe strmlen, errors if exceeds `maxlen`
 
-from insane blogger
+If success, returns size of string excluding the NULL terminator.  If the NULL
+terminator is not found prior to `maxlen`, then errors.
+
+See CSR_strmlen_x for a version of this function that does not error, but
+careful using it with strcpy as you could get an overflow.  CSR_strmcpy will
+stop copying upon hitting `maxlen` and will add a NULL terminator so it is safe
+to use CSR_strmlen with that.
+
+partly from insane blogger
 */
 size_t CSR_strmlen(const char * str, size_t maxlen) {
+  size_t res = CSR_strmlen(str, maxlen);
+  if(res == maxlen && *(str + res)) {
+    // reached max len and next charcter is not NULL terminator
+    error("%s %d %s",
+      "Logic Error: failed to find string terminator prior to maxlen",
+      maxlen, "characters"
+    );
+  }
+  return res;
+}
+/*
+IMPORTANT: only use with CSR_strmcpy since that will not try to copy past maxlen
+*/
+size_t CSR_strmlen_x(const char * str, size_t maxlen) {
   const char *p = (const char *) memchr(str, 0, maxlen);
-  if(!p) error(
-    "%s%s",
-    "CSR_strmlen: String longer than `maxlen`! Cannot measure; ",
-    "contact maintainer."
-  );
-  return p - str;
+  size_t res;
+  if(!p) {
+    res = maxlen;
+  } else {
+    res = p - str;
+  }
+  return res;
 }
 /*
 If str has more than size characters, returns a copy of str truncated to size
