@@ -81,8 +81,10 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
       "Logic Error: failed making copy of string for truncation; ",
       "contact maintainer."
     );
+  // Ensure null terminated if last character is not NULL; this happens when
+  // truncating to `maxlen`
 
-  if(str_new[len]) str_new[len + 1] = '\0';
+  if(str_new[len - 1]) str_new[len] = '\0';
   return str_new;
 }
 /* Add two size_t if possible, error otherwise */
