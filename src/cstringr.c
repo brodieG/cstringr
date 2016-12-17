@@ -34,7 +34,7 @@ to use CSR_strmlen with that.
 partly from insane blogger
 */
 size_t CSR_strmlen(const char * str, size_t maxlen) {
-  size_t res = CSR_strmlen(str, maxlen);
+  size_t res = CSR_strmlen_x(str, maxlen);
   if(res == maxlen && *(str + res)) {
     // reached max len and next charcter is not NULL terminator
     error("%s %d %s",
@@ -63,63 +63,71 @@ characters with a null character appended such that strmlen() str == size,
 otherwise returns a copy of str.
 
 Note, final string size could be up to maxlen + 1 including the NULL terminator.
+A NULL terminator is always added at the end of the string.
 */
 char * CSR_strmcpy(const char * str, size_t maxlen) {
   if(!maxlen) return("");
   if(!(maxlen + 1))
-    error("Argument `maxlen` must be at least one smaller than max possible size_t value.");
+    error("%s%s",
+      "Argument `maxlen` must be at least one smaller than max possible ",
+      "size_t value."
+    );
 
-  size_t len = CSR_strmlen(str, maxlen);
+  size_t len = CSR_strmlen_x(str, maxlen);
   char * str_new = R_alloc(len + 1, sizeof(char));
 
-  if(len == maxlen) {  // Need to truncate
-    if(!strncpy(str_new, str, maxlen))
-      error("Logic Error: failed making copy of string for truncation; contact maintainer.");
-    str_new[maxlen] = '\0';
-    return str_new;
-  } else if (len < maxlen) {
-    strcpy(str_new, str);
-    return str_new;
-  }
-  error("Logic Error: should never get here 46; contact maintainer.");
-}
+  if(!strncpy(str_new, str, len))
+    error("%s%s",
+      "Logic Error: failed making copy of string for truncation; ",
+      "contact maintainer."
+    );
 
+  if(str_new[len]) str_new[len + 1] = '\0';
+  return str_new;
+}
 /* Add two size_t if possible, error otherwise */
 
 static size_t add_szt(size_t a, size_t b) {
   size_t full_len = a + b;
   if(full_len < a || full_len < b)
-    error("size_t overflow: you are likely attempting to construct a string with more than size_t characters");
+    error("%s%s",
+      "size_t overflow: you are likely attempting to construct a string with ",
+      "more than size_t characters"
+    );
   return full_len;
 }
-/* Returns a character pointer containing the results of using `a` as the parent
+/*
+Returns a character pointer containing the results of using `a` as the parent
 string and all the others a substrings with `sprintf`
 
 note:
-- will over-allocate by the amount of formatting characters, could fix, but meh
+- will over-allocate by the amount of formatting characters, and also by the number of NULL terminators, could fix but this seems harmless enough
 */
 
 char * CSR_smprintf6(
   size_t maxlen, const char * format, const char * a, const char * b,
   const char * c, const char * d, const char * e, const char * f
 ) {
-  // Make sure we don't exceed size_t
+  // Make sure we don't exceed size_t; also note that CSR_strmlen_x counts the
+  // NULL terminator
 
   size_t full_len;
-  full_len = add_szt(CSR_strmlen(format, maxlen), CSR_strmlen(a, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen(b, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen(c, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen(d, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen(e, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen(f, maxlen));
+  full_len = add_szt(CSR_strmlen_x(format, maxlen), CSR_strmlen_x(a, maxlen));
+  full_len = add_szt(full_len, CSR_strmlen_x(b, maxlen));
+  full_len = add_szt(full_len, CSR_strmlen_x(c, maxlen));
+  full_len = add_szt(full_len, CSR_strmlen_x(d, maxlen));
+  full_len = add_szt(full_len, CSR_strmlen_x(e, maxlen));
+  full_len = add_szt(full_len, CSR_strmlen_x(f, maxlen));
 
   char * res;
-  res = R_alloc(full_len, sizeof(char));
-  sprintf(
+  res = R_alloc(full_len + 1, sizeof(char));
+  int res_len = sprintf(
     res, CSR_strmcpy(format, maxlen), CSR_strmcpy(a, maxlen),
     CSR_strmcpy(b, maxlen), CSR_strmcpy(c, maxlen),
     CSR_strmcpy(d, maxlen), CSR_strmcpy(e, maxlen), CSR_strmcpy(f, maxlen)
   );
+  if(res_len < 0)
+    error("CSR_smprintf6: `sprintf` returned -1 when generating new string");
   return res;
 }
 char * CSR_smprintf5(
@@ -185,7 +193,7 @@ const char * CSR_bullet(
   size_t ctd_size = CSR_strmlen(ctd, max_len);
   size_t bullet_size = CSR_strmlen(bullet, max_len);
 
-  // Try to add all numbers together in a way that checks for overflows
+  // Add all numbers together in a way that checks for overflows
 
   size_t size_all = add_szt(string_copy - string, 1);
   size_all = add_szt(size_all, bullet_size);
@@ -219,7 +227,7 @@ const char * CSR_bullet(
     }
     // *(res_cpy + 1) = '\0';  // so we can Rprintf
   }
-  *(res_cpy + 1) = '\0';
+  *(res_cpy) = '\0';
 
   return res;
 }
