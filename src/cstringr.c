@@ -37,9 +37,9 @@ size_t CSR_strmlen(const char * str, size_t maxlen) {
   size_t res = CSR_strmlen_x(str, maxlen);
   if(res == maxlen && *(str + res)) {
     // reached max len and next charcter is not NULL terminator
-    error("%s %d %s",
-      "Logic Error: failed to find string terminator prior to maxlen",
-      maxlen, "characters"
+    error("%s %s %d %s",
+      "Internal Error (CSR_strmlen): failed to find string terminator prior",
+      "to maxlen", maxlen, "characters"
     );
   }
   return res;
@@ -74,12 +74,15 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
     );
 
   size_t len = CSR_strmlen_x(str, maxlen);
+  if(len == maxlen && str[len])
+    warning("CSR_strmcopy: truncated string longer than %d", maxlen);
+
   char * str_new = R_alloc(len + 1, sizeof(char));
 
   if(!strncpy(str_new, str, len))
     error("%s%s",
-      "Logic Error: failed making copy of string for truncation; ",
-      "contact maintainer."
+      "Internal Error (CSR_strmcopy): failed making copy of string for  ",
+      "truncation; contact maintainer."
     );
   // Ensure null terminated if last character is not NULL; this happens when
   // truncating to `maxlen`
@@ -103,16 +106,15 @@ Returns a character pointer containing the results of using `a` as the parent
 string and all the others a substrings with `sprintf`
 
 note:
-- will over-allocate by the amount of formatting characters, and also by the number of NULL terminators, could fix but this seems harmless enough
+- will over-allocate by the amount of formatting characters
+- maxlen limits the length of individual components and the formatting string,
+not the output
 */
 
 char * CSR_smprintf6(
   size_t maxlen, const char * format, const char * a, const char * b,
   const char * c, const char * d, const char * e, const char * f
 ) {
-  // Make sure we don't exceed size_t; also note that CSR_strmlen_x counts the
-  // NULL terminator
-
   size_t full_len;
   full_len = add_szt(CSR_strmlen_x(format, maxlen), CSR_strmlen_x(a, maxlen));
   full_len = add_szt(full_len, CSR_strmlen_x(b, maxlen));
@@ -120,6 +122,7 @@ char * CSR_smprintf6(
   full_len = add_szt(full_len, CSR_strmlen_x(d, maxlen));
   full_len = add_szt(full_len, CSR_strmlen_x(e, maxlen));
   full_len = add_szt(full_len, CSR_strmlen_x(f, maxlen));
+
 
   char * res;
   res = R_alloc(full_len + 1, sizeof(char));
@@ -129,7 +132,10 @@ char * CSR_smprintf6(
     CSR_strmcpy(d, maxlen), CSR_strmcpy(e, maxlen), CSR_strmcpy(f, maxlen)
   );
   if(res_len < 0)
-    error("CSR_smprintf6: `sprintf` returned -1 when generating new string");
+    error("%s%s",
+      "Internal Error (CSR_smprintf): `sprintf` returned -1 when generating ",
+      "new string"
+    );
   return res;
 }
 char * CSR_smprintf5(
