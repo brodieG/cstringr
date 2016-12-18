@@ -16,6 +16,7 @@ identical(strmlen(lorem), nchar(lorem))
 strmlen(lorem, 100L)
 
 identical(strmcpy(lorem), lorem)
+strmcpy("")
 strmcpy(lorem, 20L)
 identical(nchar(strmcpy(lorem, 20L)), 20L)
 

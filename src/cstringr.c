@@ -85,9 +85,12 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
       "truncation; contact maintainer."
     );
   // Ensure null terminated if last character is not NULL; this happens when
-  // truncating to `maxlen`
+  // truncating to `maxlen`, also if zero len make sure that is a NULL
 
-  if(str_new[len - 1]) str_new[len] = '\0';
+  if(!len) {
+    str_new[0] = '\0';
+  } else if(str_new[len - 1]) str_new[len] = '\0';
+
   return str_new;
 }
 /* Add two size_t if possible, error otherwise */
