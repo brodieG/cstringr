@@ -89,3 +89,8 @@ lcfirst <- function(str, maxlen=10000L) .Call(CSR_lcfirst_ext, str, maxlen)
 
 strbullet <- function(str, bullet="- ", ctd="  ", maxlen=10000L)
   .Call(CSR_bullet_ext, str, bullet, ctd, maxlen)
+
+#' @export
+
+collapse <- function(str, sep="", maxlen=10000L)
+  .Call(CSR_collapse_ext, str, sep, maxlen)

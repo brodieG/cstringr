@@ -93,14 +93,47 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
 
   return str_new;
 }
+/*
+ * Like CSR_strmcpy, but copies to a presupplied pointer (`target`).  In this
+ * way it is much closer to strncpy, except that it truncates everything at
+ * `maxlen`.
+ *
+ * Note this requires that you pre-compute and allocate `str` properly.
+ */
+void CSR_strappend(char * target, const char * str, size_t maxlen) {
+  if(maxlen) {
+    if(!(maxlen + 1))
+      error("%s%s",
+        "Argument `maxlen` must be at least one smaller than max possible ",
+        "size_t value."
+      );
+    if(!strncpy(target, str, maxlen))
+      error("%s%s",
+        "Internal Error (CSR_strmcopy): failed making copy of string for  ",
+        "truncation; contact maintainer."
+      );
+
+    size_t len = CSR_strmlen_x(str, maxlen);
+    if(len == maxlen && str[len])
+      warning("CSR_strappend: truncated string longer than %d", maxlen);
+
+    // Ensure null terminated if last character is not NULL; this happens when
+    // truncating to `maxlen`, also if zero len make sure that is a NULL
+
+    if(!len) {
+      target[0] = '\0';
+    } else if(target[len - 1]) target[len] = '\0';
+  }
+}
+
 /* Add two size_t if possible, error otherwise */
 
 static size_t add_szt(size_t a, size_t b) {
   size_t full_len = a + b;
   if(full_len < a || full_len < b)
     error("%s%s",
-      "size_t overflow: you are likely attempting to construct a string with ",
-      "more than size_t characters"
+      "size_t overflow: you tried to add two size_t numbers that together ",
+      "overflow size_t"
     );
   return full_len;
 }
@@ -242,4 +275,51 @@ const char * CSR_bullet(
 
   return res;
 }
+/*
+ * Collapse STRSXP into one chr *
+ *
+ * Strings will get truncate dat `max_len` if they are longer than that
+ */
 
+const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
+  if(TYPEOF(str) != STRSXP) error("Argument `str` must be a character vector");
+
+  R_xlen_t str_len = XLENGTH(str);
+  if(!str_len) {
+    return "";
+  } else {
+    // Compute sizes
+
+    size_t size_all = 0;
+    size_t sep_len = CSR_strmlen_x(sep, max_len);
+    R_xlen_t i;
+
+    for(i = 0; i < str_len; i++) {
+      size_all =
+        add_szt(size_all, CSR_strmlen_x(CHAR(STRING_ELT(str, i)), max_len));
+      if(i < str_len - 1) {
+        size_all = add_szt(size_all, sep_len);
+      }
+    }
+    // Allocate and generate string
+
+    char * str_new = R_alloc(size_all + 1, sizeof(char));
+    char * str_cpy = str_new;
+
+    for(i = 0; i < str_len; i++) {
+      const char * to_copy = CHAR(STRING_ELT(str, i));
+      CSR_strappend(str_cpy, to_copy, max_len);
+      str_cpy += CSR_strmlen_x(to_copy, max_len);
+      if(i < str_len - 1) {
+        CSR_strappend(str_cpy, sep, max_len);
+        str_cpy += sep_len;
+      }
+    }
+    *str_cpy = '\0';
+    return (const char *) str_new;
+  }
+  error("Internal error: should never get here 2123; contact maintainer.");
+}
+SEXP CSR_collapse_ext(SEXP str, SEXP sep, SEXP max_len) {
+  mkString(CSR_collapse(str, CHAR(asChar(sep)), INTEGER(max_len)[0]));
+}
