@@ -305,6 +305,7 @@ const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
 
     char * str_new = R_alloc(size_all + 1, sizeof(char));
     char * str_cpy = str_new;
+    Rprintf("Allocated %zu\n", size_all + 1);
 
     for(i = 0; i < str_len; i++) {
       const char * to_copy = CHAR(STRING_ELT(str, i));
@@ -314,6 +315,7 @@ const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
         CSR_strappend(str_cpy, sep, max_len);
         str_cpy += sep_len;
       }
+      Rprintf("%s: %zu\n", str_new, str_cpy - str_new);
     }
     *str_cpy = '\0';
     return (const char *) str_new;
@@ -321,5 +323,5 @@ const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
   error("Internal error: should never get here 2123; contact maintainer.");
 }
 SEXP CSR_collapse_ext(SEXP str, SEXP sep, SEXP max_len) {
-  mkString(CSR_collapse(str, CHAR(asChar(sep)), INTEGER(max_len)[0]));
+  return mkString(CSR_collapse(str, CHAR(asChar(sep)), INTEGER(max_len)[0]));
 }

@@ -16,6 +16,7 @@ SEXP CSR_smprintf2_ext(SEXP maxlen, SEXP format, SEXP a, SEXP b);
 SEXP CSR_ucfirst_ext(SEXP str, SEXP maxlen);
 SEXP CSR_lcfirst_ext(SEXP str, SEXP maxlen);
 SEXP CSR_bullet_ext(SEXP str, SEXP bullet, SEXP ctd, SEXP maxlen);
+SEXP CSR_collapse_ext(SEXP str, SEXP sep, SEXP maxlen);
 
 // Internal Functions
 

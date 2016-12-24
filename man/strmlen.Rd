@@ -57,6 +57,8 @@ modifying one passed as an argument.).
     Fails if result string is longer than a \code{size_t} could index.  Note
     that internally we define \code{smprintf1} - \code{smprintf6}, but we are
     only exporting the one function directly to R for testing.
+  \item \code{strbullet} ads a bullet at front of string and padding after
+    each new line
 }
 }
 
