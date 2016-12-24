@@ -107,15 +107,16 @@ void CSR_strappend(char * target, const char * str, size_t maxlen) {
         "Argument `maxlen` must be at least one smaller than max possible ",
         "size_t value."
       );
-    if(!strncpy(target, str, maxlen))
+    size_t len = CSR_strmlen_x(str, maxlen);
+
+    if(len == maxlen && str[len])
+      warning("CSR_strmcopy: truncated string longer than %d", maxlen);
+
+    if(!strncpy(target, str, len))
       error("%s%s",
-        "Internal Error (CSR_strmcopy): failed making copy of string for  ",
+        "Internal Error (CSR_strappend): failed making copy of string for  ",
         "truncation; contact maintainer."
       );
-
-    size_t len = CSR_strmlen_x(str, maxlen);
-    if(len == maxlen && str[len])
-      warning("CSR_strappend: truncated string longer than %d", maxlen);
 
     // Ensure null terminated if last character is not NULL; this happens when
     // truncating to `maxlen`, also if zero len make sure that is a NULL
@@ -281,7 +282,7 @@ const char * CSR_bullet(
  * Strings will get truncate dat `max_len` if they are longer than that
  */
 
-const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
+char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
   if(TYPEOF(str) != STRSXP) error("Argument `str` must be a character vector");
 
   R_xlen_t str_len = XLENGTH(str);
@@ -305,7 +306,6 @@ const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
 
     char * str_new = R_alloc(size_all + 1, sizeof(char));
     char * str_cpy = str_new;
-    Rprintf("Allocated %zu\n", size_all + 1);
 
     for(i = 0; i < str_len; i++) {
       const char * to_copy = CHAR(STRING_ELT(str, i));
@@ -315,10 +315,9 @@ const char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
         CSR_strappend(str_cpy, sep, max_len);
         str_cpy += sep_len;
       }
-      Rprintf("%s: %zu\n", str_new, str_cpy - str_new);
     }
     *str_cpy = '\0';
-    return (const char *) str_new;
+    return str_new;
   }
   error("Internal error: should never get here 2123; contact maintainer.");
 }
