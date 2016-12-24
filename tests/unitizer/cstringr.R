@@ -16,6 +16,7 @@ identical(strmlen(lorem), nchar(lorem))
 strmlen(lorem, 100L)
 
 identical(strmcpy(lorem), lorem)
+strmcpy("")
 strmcpy(lorem, 20L)
 identical(nchar(strmcpy(lorem, 20L)), 20L)
 
@@ -26,3 +27,8 @@ lorem # make sure lorem unchanged
 
 ucfirst("hello WORLD")
 lcfirst("HELLO world")
+
+strbullet(
+  c("hello world\nhow are things today", "once upon a time\nlived a funny duck")
+)
+strbullet("hello\nblah\n", bullet="  - ", ctd="    ")
