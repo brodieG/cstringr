@@ -99,6 +99,9 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
  * `maxlen`.
  *
  * Note this requires that you pre-compute and allocate `str` properly.
+ *
+ * Probably would be a bit more efficient if we sent over the lenght of the
+ * object instead of having to measure it here, but this is fast enough as is.
  */
 void CSR_strappend(char * target, const char * str, size_t maxlen) {
   if(maxlen) {

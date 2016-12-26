@@ -26,6 +26,7 @@ void R_init_cstringr(DllInfo *info)
   R_RegisterCCallable("cstringr", "CSR_len_as_chr", (DL_FUNC) CSR_len_as_chr);
   R_RegisterCCallable("cstringr", "CSR_strmlen", (DL_FUNC) CSR_strmlen);
   R_RegisterCCallable("cstringr", "CSR_bullet", (DL_FUNC) CSR_bullet);
+  R_RegisterCCallable("cstringr", "CSR_collapse", (DL_FUNC) CSR_collapse);
   R_RegisterCCallable("cstringr", "CSR_strmcpy", (DL_FUNC) CSR_strmcpy);
   R_RegisterCCallable("cstringr", "CSR_smprintf6", (DL_FUNC) CSR_smprintf6);
   R_RegisterCCallable("cstringr", "CSR_smprintf5", (DL_FUNC) CSR_smprintf5);

@@ -32,3 +32,6 @@ strbullet(
   c("hello world\nhow are things today", "once upon a time\nlived a funny duck")
 )
 strbullet("hello\nblah\n", bullet="  - ", ctd="    ")
+
+collapse(letters[1:5])
+collapse(letters[1:5], sep="\n")
