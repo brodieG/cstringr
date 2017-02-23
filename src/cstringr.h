@@ -51,4 +51,4 @@ const char * CSR_bullet(
 char * CSR_ucfirst(const char * str, size_t maxlen);
 char * CSR_lcfirst(const char * str, size_t maxlen);
 
-SEXP CSR_collapse(SEXP str, const char *, size_t maxlen);
+char * CSR_collapse(SEXP str, const char *, size_t maxlen);
