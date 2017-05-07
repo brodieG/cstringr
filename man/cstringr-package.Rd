@@ -5,9 +5,8 @@
 \alias{cstringr-package}
 \title{cstringr}
 \description{
-Low level C string manipulation functions.  This is the R interface that is
-intended solely for testing since R already implements this functionality
-and more.  The main use of the package is for the C functions that are
-\code{R_RegisterCCallable}'d.
+Low level C string manipulation functions intended for use from C code in
+other R packages.  Some functions are exposed via R for testing purposes, but
+there is no point in using those since base R already implements all of the
+functionality in this package.
 }
-

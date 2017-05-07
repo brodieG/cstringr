@@ -15,4 +15,3 @@ character(1L)
 \description{
 e.g., \code{100} becomes \code{"100"}
 }
-

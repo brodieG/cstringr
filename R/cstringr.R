@@ -55,41 +55,55 @@ len_as_chr <-function(x) .Call(CSR_len_as_chr_ext, x)
 #'     only exporting the one function directly to R for testing.
 #'   \item \code{strbullet} ads a bullet at front of string and padding after
 #'     each new line
+#'   \item \code{collapse} is essentially the same as \code{paste0(x,
+#'     collapse=sep}
 #' }
 #' @export
-#' @aliases strmcpy smprintf2
-#' @param str character(1L) string to measure or truncate
+#' @aliases strmcpy smprintf2 ucfirst lcfirst strbullet collapse
+#' @param str character string to measure or manipulate, should be scalar for
+#'   \code{strmlen} and \code{strmcpy}
 #' @param format character(1L) string to use as format template
 #' @param maxlen integer(1L) size limit to truncate to, or to limit tokens to
 #' @param a character(1L) another string
 #' @param b character(1L) another string
+#' @param bullet character(1L) a string to use as the bullet symbol
+#' @param ctd character(1L) a string preferably the same number of characters as
+#'   \code{bullet} to use after the first line wraps in a bullet
+#' @param sep character(1L) a separator to use when collapsing character vectors
+#'   with \code{collapse}
 #' @return integer(1L) for \code{strmlen}, character(1L) for \code{strmcpy}
 #'   and \code{smprintf2}
 
 strmlen <- function(str, maxlen=10000L) .Call(CSR_strmlen_ext, str, maxlen)
 
+#' @rdname strmlen
 #' @export
 
 strmcpy <- function(str, maxlen=10000L) .Call(CSR_strmcpy_ext, str, maxlen)
 
+#' @rdname strmlen
 #' @export
 
 smprintf2 <- function(format, a, b, maxlen=10000L)
   .Call(CSR_smprintf2_ext, maxlen, format, a, b)
 
+#' @rdname strmlen
 #' @export
 
 ucfirst <- function(str, maxlen=10000L) .Call(CSR_ucfirst_ext, str, maxlen)
 
+#' @rdname strmlen
 #' @export
 
 lcfirst <- function(str, maxlen=10000L) .Call(CSR_lcfirst_ext, str, maxlen)
 
+#' @rdname strmlen
 #' @export
 
 strbullet <- function(str, bullet="- ", ctd="  ", maxlen=10000L)
   .Call(CSR_bullet_ext, str, bullet, ctd, maxlen)
 
+#' @rdname strmlen
 #' @export
 
 collapse <- function(str, sep="", maxlen=10000L)

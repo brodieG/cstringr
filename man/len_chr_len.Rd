@@ -15,4 +15,3 @@ integer(1L)
 \description{
 e.g., for 100, would be 3, for 1324, would be 4.
 }
-
