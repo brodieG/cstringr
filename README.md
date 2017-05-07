@@ -1,5 +1,9 @@
 #  cstringr - C String Manipulation Functions for R
 
+[![](https://travis-ci.org/brodieG/cstringer.svg?branch=master)](https://travis-ci.org/brodieG/cstringer)
+[![](https://codecov.io/github/brodieG/cstringer/coverage.svg?branch=master)](https://codecov.io/github/brodieG/cstringer?branch=master)
+[![Project Status: Unsupported – The project has reached a stable, usable state but the author(s) have ceased all work on it.](http://www.repostatus.org/badges/latest/unsupported.svg)](http://www.repostatus.org/#unsupported)
+
 ## Overview
 
 Low level C string manipulation functions intended for use from C code in other
