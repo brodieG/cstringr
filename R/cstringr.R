@@ -108,3 +108,14 @@ strbullet <- function(str, bullet="- ", ctd="  ", maxlen=10000L)
 
 collapse <- function(str, sep="", maxlen=10000L)
   .Call(CSR_collapse_ext, str, sep, maxlen)
+
+## Purely internal funs for testing
+
+test1 <- function() .Call(CSR_test_strmcpy)
+test2 <- function() .Call(CSR_test_strappend)
+test3 <- function() .Call(CSR_test_add_szt)
+
+test4 <- function() .Call(CSR_test_smprintfx)
+
+test5 <- function() .Call(CSR_test_strappend2)
+

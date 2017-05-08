@@ -12,6 +12,11 @@ R_CallMethodDef callMethods[] = {
   {"smprintf2_ext", (DL_FUNC) &CSR_smprintf2_ext, 4},
   {"ucfirst_ext", (DL_FUNC) &CSR_ucfirst_ext, 2},
   {"lcfirst_ext", (DL_FUNC) &CSR_lcfirst_ext, 2},
+  {"test_strmcpy", (DL_FUNC) &CSR_test_strmcpy, 0},
+  {"test_strappend", (DL_FUNC) &CSR_test_strappend, 0},
+  {"test_add_szt", (DL_FUNC) &CSR_test_add_szt, 0},
+  {"test_smprintfx", (DL_FUNC) &CSR_test_smprintfx, 0},
+  {"test_strappend2", (DL_FUNC) &CSR_test_strappend2, 0},
   {NULL, NULL, 0}
 };
 

@@ -76,3 +76,4 @@ SEXP CSR_bullet_ext(SEXP str, SEXP bullet, SEXP ctd, SEXP maxlen) {
   UNPROTECT(1);
   return res;
 }
+

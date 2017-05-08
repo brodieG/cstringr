@@ -3,9 +3,13 @@
 /* Estimate how many characters a R_xlen_t number can be represented with*/
 
 size_t CSR_len_chr_len(R_xlen_t a) {
-  if(a < 0)
+  if(a < 0) {
+    // nocov start
     error("Logic Error: unexpected negative length value; contact maintainer");
-  size_t log_len = (size_t) ceil(log10(a + 1.00001));  // + 1.00001 to account for 0
+    // nocov end
+  }
+  // + 1.00001 to account for 0
+  size_t log_len = (size_t) ceil(log10(a + 1.00001));
   return log_len;
 }
 /*
@@ -17,7 +21,7 @@ char * CSR_len_as_chr(R_xlen_t a) {
   char * res;
   res = R_alloc(CSR_len_chr_len(a) + 1, sizeof(char));
   if(!sprintf(res, "%zd", a))    // used to be %td, but doesn't work on windows?
-    error("Logic Error: r_xlen_to_char conversion failed");
+    error("Logic Error: r_xlen_to_char conversion failed");  // nocov
   return res;
 }
 /*
@@ -67,11 +71,12 @@ A NULL terminator is always added at the end of the string.
 */
 char * CSR_strmcpy(const char * str, size_t maxlen) {
   if(!maxlen) return("");
-  if(!(maxlen + 1))
+  if(!(maxlen + 1)) {
     error("%s%s",
       "Argument `maxlen` must be at least one smaller than max possible ",
       "size_t value."
     );
+  }
 
   size_t len = CSR_strmlen_x(str, maxlen);
   if(len == maxlen && str[len])
@@ -79,11 +84,14 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
 
   char * str_new = R_alloc(len + 1, sizeof(char));
 
-  if(!strncpy(str_new, str, len))
+  if(!strncpy(str_new, str, len)) {
+    // nocov start
     error("%s%s",
       "Internal Error (CSR_strmcopy): failed making copy of string for  ",
       "truncation; contact maintainer."
     );
+    // nocov end
+  }
   // Ensure null terminated if last character is not NULL; this happens when
   // truncating to `maxlen`, also if zero len make sure that is a NULL
 
@@ -105,22 +113,25 @@ char * CSR_strmcpy(const char * str, size_t maxlen) {
  */
 void CSR_strappend(char * target, const char * str, size_t maxlen) {
   if(maxlen) {
-    if(!(maxlen + 1))
+    if(!(maxlen + 1)) {
       error("%s%s",
         "Argument `maxlen` must be at least one smaller than max possible ",
         "size_t value."
       );
+    }
     size_t len = CSR_strmlen_x(str, maxlen);
 
     if(len == maxlen && str[len])
       warning("CSR_strmcopy: truncated string longer than %d", maxlen);
 
-    if(!strncpy(target, str, len))
+    if(!strncpy(target, str, len)) {
+      // nocov start
       error("%s%s",
         "Internal Error (CSR_strappend): failed making copy of string for  ",
         "truncation; contact maintainer."
       );
-
+      // nocov end
+    }
     // Ensure null terminated if last character is not NULL; this happens when
     // truncating to `maxlen`, also if zero len make sure that is a NULL
 
@@ -130,9 +141,11 @@ void CSR_strappend(char * target, const char * str, size_t maxlen) {
   }
 }
 
-/* Add two size_t if possible, error otherwise */
+/*
+ * Add two size_t if possible, error otherwise
+ */
 
-static size_t add_szt(size_t a, size_t b) {
+size_t CSR_add_szt(size_t a, size_t b) {
   size_t full_len = a + b;
   if(full_len < a || full_len < b)
     error("%s%s",
@@ -156,12 +169,13 @@ char * CSR_smprintf6(
   const char * c, const char * d, const char * e, const char * f
 ) {
   size_t full_len;
-  full_len = add_szt(CSR_strmlen_x(format, maxlen), CSR_strmlen_x(a, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen_x(b, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen_x(c, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen_x(d, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen_x(e, maxlen));
-  full_len = add_szt(full_len, CSR_strmlen_x(f, maxlen));
+  full_len =
+    CSR_add_szt(CSR_strmlen_x(format, maxlen), CSR_strmlen_x(a, maxlen));
+  full_len = CSR_add_szt(full_len, CSR_strmlen_x(b, maxlen));
+  full_len = CSR_add_szt(full_len, CSR_strmlen_x(c, maxlen));
+  full_len = CSR_add_szt(full_len, CSR_strmlen_x(d, maxlen));
+  full_len = CSR_add_szt(full_len, CSR_strmlen_x(e, maxlen));
+  full_len = CSR_add_szt(full_len, CSR_strmlen_x(f, maxlen));
 
 
   char * res;
@@ -171,11 +185,14 @@ char * CSR_smprintf6(
     CSR_strmcpy(b, maxlen), CSR_strmcpy(c, maxlen),
     CSR_strmcpy(d, maxlen), CSR_strmcpy(e, maxlen), CSR_strmcpy(f, maxlen)
   );
-  if(res_len < 0)
+  if(res_len < 0) {
+    // nocov start
     error("%s%s",
       "Internal Error (CSR_smprintf): `sprintf` returned -1 when generating ",
       "new string"
     );
+    // nocov end
+  }
   return res;
 }
 char * CSR_smprintf5(
@@ -243,9 +260,10 @@ const char * CSR_bullet(
 
   // Add all numbers together in a way that checks for overflows
 
-  size_t size_all = add_szt(string_copy - string, 1);
-  size_all = add_szt(size_all, bullet_size);
-  for(size_t i = 0; i < newlines; ++i) size_all = add_szt(size_all, ctd_size);
+  size_t size_all = CSR_add_szt(string_copy - string, 1);
+  size_all = CSR_add_szt(size_all, bullet_size);
+  for(size_t i = 0; i < newlines; ++i)
+    size_all = CSR_add_szt(size_all, ctd_size);
 
   if(size_all > max_len)
     error("Exceeded `max_len` when trying to bullet `string` (2)");
@@ -300,9 +318,9 @@ char * CSR_collapse(SEXP str, const char * sep, size_t max_len) {
 
     for(i = 0; i < str_len; i++) {
       size_all =
-        add_szt(size_all, CSR_strmlen_x(CHAR(STRING_ELT(str, i)), max_len));
+        CSR_add_szt(size_all, CSR_strmlen_x(CHAR(STRING_ELT(str, i)), max_len));
       if(i < str_len - 1) {
-        size_all = add_szt(size_all, sep_len);
+        size_all = CSR_add_szt(size_all, sep_len);
       }
     }
     // Allocate and generate string

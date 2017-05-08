@@ -18,6 +18,12 @@ SEXP CSR_lcfirst_ext(SEXP str, SEXP maxlen);
 SEXP CSR_bullet_ext(SEXP str, SEXP bullet, SEXP ctd, SEXP maxlen);
 SEXP CSR_collapse_ext(SEXP str, SEXP sep, SEXP maxlen);
 
+SEXP CSR_test_strmcpy();
+SEXP CSR_test_strappend();
+SEXP CSR_test_strappend2();
+SEXP CSR_test_add_szt();
+SEXP CSR_test_smprintfx();
+
 // Internal Functions
 
 size_t CSR_len_chr_len(R_xlen_t a);
@@ -52,3 +58,8 @@ char * CSR_ucfirst(const char * str, size_t maxlen);
 char * CSR_lcfirst(const char * str, size_t maxlen);
 
 char * CSR_collapse(SEXP str, const char *, size_t maxlen);
+
+void CSR_strappend(char * target, const char * str, size_t maxlen);
+
+size_t CSR_add_szt(size_t a, size_t b);
+
