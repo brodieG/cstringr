@@ -10,5 +10,6 @@ Depends:
 License: GPL-2
 LazyData: true
 Suggests:
-    unitizer
+    unitizer,
+    covr
 RoxygenNote: 6.0.1
