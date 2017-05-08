@@ -1,7 +1,7 @@
 #  cstringr - C String Manipulation Functions for R
 
-[![](https://travis-ci.org/brodieG/cstringer.svg?branch=master)](https://travis-ci.org/brodieG/cstringer)
-[![](https://codecov.io/github/brodieG/cstringer/coverage.svg?branch=master)](https://codecov.io/github/brodieG/cstringer?branch=master)
+[![](https://travis-ci.org/brodieG/cstringr.svg?branch=master)](https://travis-ci.org/brodieG/cstringr)
+[![](https://codecov.io/github/brodieG/cstringr/coverage.svg?branch=master)](https://codecov.io/github/brodieG/cstringr?branch=master)
 [![Project Status: Unsupported – The project has reached a stable, usable state but the author(s) have ceased all work on it.](http://www.repostatus.org/badges/latest/unsupported.svg)](http://www.repostatus.org/#unsupported)
 
 ## Overview
