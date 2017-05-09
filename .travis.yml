@@ -1,0 +1,20 @@
+language: r
+r:
+  - oldrel
+  - release
+  - devel
+
+r_github_packages: brodieG/unitizer@development
+
+sudo: false
+
+cache: packages
+
+branches:
+  only:
+    - master
+    - development
+    - rc
+
+after_success:
+  - Rscript covr.R

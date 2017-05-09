@@ -1,6 +1,6 @@
 Package: cstringr
-Title: Low Level C String Manipulations
-Version: 0.0.0.9000
+Title: C String Manipulation Functions for R
+Version: 0.1.0
 Description: Exports safer versions of `strlen`, `sprintf`, and a couple of
     additional helper functions.
 Author: Brodie Gaslam
@@ -9,3 +9,7 @@ Depends:
     R (>= 3.1.2)
 License: GPL-2
 LazyData: true
+Suggests:
+    unitizer,
+    covr
+RoxygenNote: 6.0.1
