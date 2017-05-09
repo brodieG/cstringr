@@ -1,6 +1,6 @@
 Package: cstringr
 Title: C String Manipulation Functions for R
-Version: 0.0.2.9001
+Version: 0.1.0
 Description: Exports safer versions of `strlen`, `sprintf`, and a couple of
     additional helper functions.
 Author: Brodie Gaslam
