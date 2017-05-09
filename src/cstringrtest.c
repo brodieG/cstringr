@@ -11,21 +11,21 @@ SEXP CSR_test_strmcpy() {
   size_t maxlen = 0;
   maxlen--; // size_t of max value
   CSR_strmcpy("hello", maxlen);
-  return R_NilValue;
+  return R_NilValue;  // nocov
 }
 
 SEXP CSR_test_strappend() {
   size_t maxlen = 0;
   maxlen--; // size_t of max value
   CSR_strappend("hello", "hello", maxlen);
-  return R_NilValue;
+  return R_NilValue;  // nocov
 }
 
 SEXP CSR_test_add_szt() {
   size_t maxlen = 0;
   maxlen--; // size_t of max value
   CSR_add_szt(maxlen, maxlen);
-  return R_NilValue;
+  return R_NilValue;  // nocov
 }
 /*
  * Make sure all the variations on CSR_smprintf6 actually work
