@@ -15,4 +15,4 @@ branches:
     - rc
 
 after_success:
-  - Rscript -e 'covr::codecov(quiet=FALSE, ...=list(quiet=FALSE))'
+  - Rscript covr.R
