@@ -4,6 +4,8 @@ r:
   - release
   - devel
 
+r_github_packages: brodieG/unitizer@development
+
 sudo: false
 
 cache: packages
